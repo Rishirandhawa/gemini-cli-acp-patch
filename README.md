@@ -82,15 +82,6 @@ gemini.stdin.write(msg);
 // Should output: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,"authMethods":[...],...}}
 ```
 
-## Using with Zed
-
-After applying the patch:
-
-1. Restart Zed
-2. Open the Agent panel (Cmd+?)
-3. Click + to start a new Gemini CLI thread
-4. Gemini should now initialize correctly
-
 ## Reverting
 
 The patch creates a backup file. To revert:
