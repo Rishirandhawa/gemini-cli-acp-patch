@@ -1,0 +1,19 @@
+{
+  "name": "gemini-cli-acp-patch",
+  "version": "1.0.0",
+  "description": "Patch for @google/gemini-cli to fix ACP mode hanging when running as subprocess with piped stdio",
+  "main": "patch.js",
+  "bin": {
+    "gemini-cli-acp-patch": "patch.js"
+  },
+  "scripts": {
+    "postinstall": "node patch.js"
+  },
+  "keywords": ["gemini-cli", "acp", "patch", "fix"],
+  "author": "Rishi Randhawa",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rishirandhawa/gemini-cli-acp-patch.git"
+  }
+}
