@@ -36,43 +36,27 @@ This patch adds an early exit for ACP mode before any sandbox/relaunch logic run
 
 ## Installation
 
-### Option 1: Install and run manually
-
 ```bash
 # First install gemini-cli
-pnpm install -g @google/gemini-cli
-# or
 npm install -g @google/gemini-cli
 
-# Then install and run the patch
-pnpm install -g github:Rishirandhawa/gemini-cli-acp-patch
-# or
+# Then install the patch tool
 npm install -g github:Rishirandhawa/gemini-cli-acp-patch
+
+# Run the patch
+gemini-cli-acp-patch
 ```
 
-The patch runs automatically on install via postinstall script.
+## Manual Path
 
-### Option 2: Run patch manually
-
-```bash
-# Clone and run
-git clone https://github.com/Rishirandhawa/gemini-cli-acp-patch.git
-cd gemini-cli-acp-patch
-node patch.js
-```
-
-### Option 3: Specify path manually
-
-If the auto-detection doesn't find your installation:
+If auto-detection doesn't find your installation:
 
 ```bash
 # Find your gemini-cli installation
 npm root -g
-# or
-pnpm root -g
 
 # Run patch with explicit path
-node patch.js /path/to/node_modules/@google/gemini-cli/dist/src/gemini.js
+gemini-cli-acp-patch /path/to/node_modules/@google/gemini-cli/dist/src/gemini.js
 ```
 
 ## Verification
@@ -107,8 +91,6 @@ The patch creates a backup file (`gemini.js.backup`). To revert:
 ```bash
 # Find your installation
 GEMINI_PATH=$(npm root -g)/@google/gemini-cli/dist/src
-# or for pnpm
-GEMINI_PATH=$(pnpm root -g)/@google/gemini-cli/dist/src
 
 # Restore backup
 cp "$GEMINI_PATH/gemini.js.backup" "$GEMINI_PATH/gemini.js"
