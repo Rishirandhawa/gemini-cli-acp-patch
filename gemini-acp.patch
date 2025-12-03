@@ -1,0 +1,19 @@
+--- a/dist/src/gemini.js
++++ b/dist/src/gemini.js
+@@ -162,6 +162,16 @@
+     registerCleanup(() => instance.unmount());
+ }
+ export async function main() {
++    // [PATCHED] Early exit for ACP mode - must happen BEFORE patchStdio()
++    // patchStdio() redirects stdout/stderr to coreEvents, breaking ACP's JSON-RPC.
++    // We check process.argv directly since yargs hasn't parsed yet.
++    if (process.argv.includes('--experimental-acp')) {
++        const settings = loadSettings();
++        const argv = await parseArguments(settings.merged);
++        const config = await loadCliConfig(settings.merged, sessionId, argv);
++        return runZedIntegration(config, settings, argv);
++    }
++
+     const cleanupStdio = patchStdio();
+     registerSyncCleanup(() => {
+         // This is needed to ensure we don't lose any buffered output.

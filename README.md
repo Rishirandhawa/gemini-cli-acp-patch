@@ -30,27 +30,45 @@ This patch inserts an early check for `--experimental-acp` at the very beginning
 
 ## Installation
 
-```bash
-# 1. Install gemini-cli globally (if not already installed)
-npm install -g @google/gemini-cli
+Two methods are available:
 
-# 2. Clone and run the patch
+### Method 1: Shell script with `patch` command
+
+```bash
 git clone https://github.com/Rishirandhawa/gemini-cli-acp-patch.git
 cd gemini-cli-acp-patch
-node patch.js
+
+# Auto-detect gemini-cli location
+./apply-patch.sh
+
+# Or specify path manually
+./apply-patch.sh /path/to/@google/gemini-cli
 ```
 
-### Manual Path
+### Method 2: Node.js script
 
-If auto-detection doesn't find your installation:
+```bash
+git clone https://github.com/Rishirandhawa/gemini-cli-acp-patch.git
+cd gemini-cli-acp-patch
+
+# Auto-detect gemini-cli location
+node patch.js
+
+# Or specify path to gemini.js manually
+node patch.js /path/to/@google/gemini-cli/dist/src/gemini.js
+```
+
+### Manual patch application
+
+If you prefer to apply the patch manually:
 
 ```bash
 # Find your gemini-cli installation
-npm root -g
-# Output example: /Users/you/.nvm/versions/node/v22.18.0/lib/node_modules
+GEMINI_CLI=$(npm root -g)/@google/gemini-cli
 
-# Run patch with explicit path
-node patch.js /path/to/node_modules/@google/gemini-cli/dist/src/gemini.js
+# Apply the patch
+cd $GEMINI_CLI
+patch -p1 < /path/to/gemini-acp.patch
 ```
 
 ## Verification
@@ -84,15 +102,37 @@ gemini.stdin.write(msg);
 
 ## Reverting
 
-The patch creates a backup file. To revert:
+### Using shell script
+
+```bash
+./revert-patch.sh
+
+# Or with explicit path
+./revert-patch.sh /path/to/@google/gemini-cli
+```
+
+### Manual revert
 
 ```bash
 # Find your installation
 GEMINI_PATH=$(npm root -g)/@google/gemini-cli/dist/src
 
-# Restore backup
+# Option 1: Restore from backup (if available)
 cp "$GEMINI_PATH/gemini.js.backup" "$GEMINI_PATH/gemini.js"
+
+# Option 2: Reverse patch
+cd $(npm root -g)/@google/gemini-cli
+patch -R -p1 < /path/to/gemini-acp.patch
 ```
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `gemini-acp.patch` | Unified diff format patch for use with `patch` command |
+| `apply-patch.sh` | Shell script to apply the patch |
+| `revert-patch.sh` | Shell script to revert the patch |
+| `patch.js` | Node.js script that applies the patch programmatically |
 
 ## Note
 
